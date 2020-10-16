@@ -1,8 +1,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "Transition.hpp"
-#include "utils.hpp"
+#include <Transition.hpp>
+#include <utils.hpp>
 
 int readNumStates()
 {
@@ -35,18 +35,9 @@ std::vector<int> readInitStates()
     std::cin >> numInitStates;
 
     std::vector<int> initStates;
-    if (numInitStates == 1) 
+    for (int i = 0; i < numInitStates; ++i) 
     {
-        initStates.push_back(0);
-    }
-    else 
-    {
-        for (int i = 0; i < numInitStates; ++i) 
-        {
-            int x; 
-            std::cin >> x;
-            initStates.push_back(x);
-        }
+        initStates.push_back(i);
     }
 
     return initStates;

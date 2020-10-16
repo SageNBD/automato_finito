@@ -1,10 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "utils.hpp"
-#include "Transition.hpp"
-#include "State.hpp"
-#include "AutomatoFinito.hpp"
+#include <utils.hpp>
+#include <Transition.hpp>
+#include <State.hpp>
+#include <AutomatoFinito.hpp>
 
 int main(int argc, char *argv[]) 
 {

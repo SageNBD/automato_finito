@@ -14,14 +14,14 @@ private:
     std::string terminalSymbols;
     std::vector<int> acceptingStates;
     std::vector<int> initStates;
-    bool isAFD;
+    bool bIsAFD;
     void setAcceptingStates(std::vector<int> acceptingStates);
     bool isValidSymbol(char ch);
     bool indexOutOfRange(int src, int dst);
     void insertTransition(int src, int dst, char ch);
     void insertTransitions(std::vector<Transition> transitions);
     void printTransition(); 
-    bool validateChain(std::string str, int stateId, int currIdx); 
+    bool isValidChain(std::string str, int stateId, int currIdx); 
 public:
     AutomatoFinito(int n, std::string terminalSymbols, std::vector<int> initStates, 
               std::vector<int> acceptingStates, std::vector<Transition> transitions);
