@@ -3,11 +3,12 @@
 #include <iostream>
 #include <AutomatoFinito.hpp>
 
-AutomatoFinito::AutomatoFinito(int n, std::string terminalSymbols, std::vector<int> initStates, 
+AutomatoFinito::AutomatoFinito(int n, std::string terminalSymbols, std::string sigmaExtended, std::vector<int> initStates, 
           std::vector<int> acceptingStates, std::vector<Transition> transitions) 
 {
     this->numStates = n;
     this->terminalSymbols = terminalSymbols;
+    this->sigmaExtended = sigmaExtended; 
     this->initStates = initStates;
     this->bIsAFD = (int)initStates.size() == 1;
     this->acceptingStates = acceptingStates;
@@ -78,10 +79,10 @@ bool AutomatoFinito::indexOutOfRange(int src, int dst)
  * @param   Transition     transition     Automata edge
  * @return  void
  */
-void AutomatoFinito::insertTransition(int src, int dst, char ch) 
+void AutomatoFinito::insertTransition(int src, int dst, char chR, char chW, char D) 
 {
-    if (!isValidSymbol(ch) || indexOutOfRange(src, dst)) return;
-    this->states[src].insertTransition(Transition(src, dst, ch));
+    if (!isValidSymbol(chR) || !isValidSymbol(chW) || indexOutOfRange(src, dst)) return;
+    this->states[src].insertTransition(Transition(src, dst, chR, chW, D));
 }
 
 /**
@@ -99,7 +100,7 @@ void AutomatoFinito::insertTransitions(std::vector<Transition> transitions)
     for (int i = 0; i < (int)transitions.size(); ++i) 
     {
         Transition t = transitions[i];
-        if (!isValidSymbol(t.edge) || indexOutOfRange(t.source, t.dest)) continue;
+        if (!isValidSymbol(t.edgeWrite) || !isValidSymbol(t.edgeWrite) || indexOutOfRange(t.source, t.dest)) continue;
         this->states[t.source].insertTransition(t);
     }
 }
@@ -116,7 +117,7 @@ void AutomatoFinito::printTransition()
         for (int i = 0; i < (int)u.transitions.size(); ++i) 
         {
             Transition t = u.transitions[i];
-            std::cout << "(" << t.source << ", " << t.dest << ", " << t.edge << ")" << '\n';
+            std::cout << "(" << t.source << ", " << t.edgeRead << ", " << t.dest << ", " << t.edgeWrite << ", " << t.direction << ")\n";
         }
     }
 }
@@ -137,8 +138,14 @@ void AutomatoFinito::printTransition()
  */
 bool AutomatoFinito::isValidChain(std::string str, int stateId, int currIdx) 
 {
-    if (currIdx >= (int)str.size()) 
-        return this->states[stateId].getFinal();
+    if (currIdx >= (int)str.size()) {
+        str.push_back('B');
+    }
+    
+    if(currIdx < 0) {
+        currIdx += 1;
+        str = "B" + str; 
+    } 
 
     State currState = this->states[stateId];
     // Test all transitions of 'stateId'
@@ -146,15 +153,21 @@ bool AutomatoFinito::isValidChain(std::string str, int stateId, int currIdx)
     {
         Transition t = currState.transitions[i];
         // Call next DFS phase
-        if (t.edge == str[currIdx] && isValidChain(str, t.dest, currIdx + 1)) 
-        {
-            return true;
+        if (t.edgeRead == str[currIdx]) {
+            // update tape
+            str[currIdx] = t.edgeWrite;
+            if(isValidChain(str, t.dest, currIdx + this->directionMap[t.direction])) 
+            {
+                return true;
+            }
+            // restore tape
+            str[currIdx] = t.edgeRead;
         }
         // Lambda 
-        else if (t.edge == '-' && isValidChain(str, t.dest, currIdx))
-        {
-            return true;
-        }
+        // else if (t.edgeRead == '-' && isValidChain(str, t.dest, currIdx))
+        // {
+        //     return true;
+        // }
     }
     return false; // Didnt find transition that matched current chain symbol
 }

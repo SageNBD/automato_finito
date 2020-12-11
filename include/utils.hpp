@@ -7,6 +7,7 @@
 
 int readNumStates();
 std::string readTerminalSymbols();
+std::string readExtendedSymbols();
 std::vector<int> readInitStates();
 std::vector<int> readAcceptingStates();
 std::vector<Transition> readTransitions();

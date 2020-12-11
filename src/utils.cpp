@@ -29,6 +29,20 @@ std::string readTerminalSymbols()
     return terminalSymbols;
 }
 
+std::string readExtendedSymbols() {
+    int numExtendedSymbols;
+    std::cin >> numExtendedSymbols;
+    std::string extendedSymbols = "";
+    for (int i = 0; i < numExtendedSymbols; ++i) 
+    {
+        char ch;
+        std::cin >> ch;
+        extendedSymbols += ch;
+    }
+
+    return extendedSymbols;
+}
+
 std::vector<int> readInitStates() 
 {
     int numInitStates;
@@ -68,9 +82,9 @@ std::vector<Transition> readTransitions()
     for (int i = 0; i < numTransitions; ++i) 
     {
         int src, dest;
-        char edge;
-        std::cin >> src >> edge >> dest;
-        transitions.push_back(Transition(src, dest, edge));
+        char edgeRead, edgeWrite, direction;
+        std::cin >> src >> edgeRead >> dest >> edgeWrite >> direction;
+        transitions.push_back(Transition(src, dest, edgeRead, edgeWrite, direction));
     }
 
     return transitions;

@@ -10,13 +10,14 @@ int main(int argc, char *argv[])
 {
     int numStates = readNumStates();
     std::string terminalSymbols = readTerminalSymbols();
-    std::vector<int> initStates = readInitStates();
+    std::string sigmaExtended = readExtendedSymbols();
+    std::vector<int> initStates(1, 0);
     std::vector<int> acceptingStates = readAcceptingStates();
     std::vector<Transition> transitions = readTransitions();
     std::vector<std::string> chains = readChains();
 
     AutomatoFinito a = AutomatoFinito(
-        numStates, terminalSymbols, initStates, acceptingStates, transitions
+        numStates, terminalSymbols, sigmaExtended, initStates, acceptingStates, transitions
     );
 
     a.runSimulation(chains);
