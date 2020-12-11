@@ -20,6 +20,6 @@ int main(int argc, char *argv[])
     );
 
     a.runSimulation(chains);
-
+    system("pause");
     return 0;
 }
