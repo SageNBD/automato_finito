@@ -19,7 +19,7 @@ std::string readTerminalSymbols()
     int numTerminalSymbols;
     std::cin >> numTerminalSymbols;
     std::string terminalSymbols = "";
-    for (int i = 0; i < numTerminalSymbols; ++i) 
+    for (int i = 0; i < numTerminalSymbols; ++i)
     {
         char ch;
         std::cin >> ch;
@@ -29,11 +29,12 @@ std::string readTerminalSymbols()
     return terminalSymbols;
 }
 
-std::string readExtendedSymbols() {
+std::string readExtendedSymbols()
+{
     int numExtendedSymbols;
     std::cin >> numExtendedSymbols;
     std::string extendedSymbols = "";
-    for (int i = 0; i < numExtendedSymbols; ++i) 
+    for (int i = 0; i < numExtendedSymbols; ++i)
     {
         char ch;
         std::cin >> ch;
@@ -43,13 +44,13 @@ std::string readExtendedSymbols() {
     return extendedSymbols;
 }
 
-std::vector<int> readInitStates() 
+std::vector<int> readInitStates()
 {
     int numInitStates;
     std::cin >> numInitStates;
 
     std::vector<int> initStates;
-    for (int i = 0; i < numInitStates; ++i) 
+    for (int i = 0; i < numInitStates; ++i)
     {
         initStates.push_back(i);
     }
@@ -59,27 +60,23 @@ std::vector<int> readInitStates()
 
 std::vector<int> readAcceptingStates()
 {
-    int numAcceptingStates;
-    std::cin >> numAcceptingStates;
+    int state;
+    std::cin >> state;
 
     std::vector<int> acceptingStates;
-    for (int i = 0; i < numAcceptingStates; ++i) 
-    {
-        int x; 
-        std::cin >> x;
-        acceptingStates.push_back(x);
-    }
+
+    acceptingStates.push_back(state);
 
     return acceptingStates;
 }
 
 std::vector<Transition> readTransitions()
 {
-    int numTransitions; 
+    int numTransitions;
     std::cin >> numTransitions;
 
     std::vector<Transition> transitions;
-    for (int i = 0; i < numTransitions; ++i) 
+    for (int i = 0; i < numTransitions; ++i)
     {
         int src, dest;
         char edgeRead, edgeWrite, direction;
@@ -96,10 +93,18 @@ std::vector<std::string> readChains()
     std::cin >> numChains;
 
     std::vector<std::string> chains;
-    for (int i = 0; i < numChains; ++i) 
+    for (int i = 0; i < numChains; ++i)
     {
-        std::string str;
-        std::cin >> str;
+        std::string tmp;
+        std::cin >> tmp;
+
+        std::string str = "";
+        for (auto u : tmp)
+        {
+            if (u != '-')
+                str += u;
+        }
+
         chains.push_back(str);
     }
 
