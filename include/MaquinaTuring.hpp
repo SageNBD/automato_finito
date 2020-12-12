@@ -7,7 +7,7 @@
 #include <string>
 #include <map>
 
-class AutomatoFinito
+class MaquinaTuring
 {
 private:
     int numStates;
@@ -22,16 +22,16 @@ private:
     bool indexOutOfRange(int src, int dst);
     void insertTransition(int src, int dst, char chR, char chW, char D);
     void insertTransitions(std::vector<Transition> transitions);
-    void printTransition(); 
-    bool isValidChain(std::string str, int stateId, int currIdx); 
+    void printTransition();
+    bool isValidChain(std::string str, int stateId, int currIdx);
     std::map<char, int> directionMap = {
-                                        {'R', 1},
-                                        {'L', -1},
-                                        {'S', 0}
-                                        };
+        {'R', 1},
+        {'L', -1},
+        {'S', 0}};
+
 public:
-    AutomatoFinito(int n, std::string terminalSymbols, std::string sigmaExtended, std::vector<int> initStates, 
-              std::vector<int> acceptingStates, std::vector<Transition> transitions);
+    MaquinaTuring(int n, std::string terminalSymbols, std::string sigmaExtended, std::vector<int> initStates,
+                  std::vector<int> acceptingStates, std::vector<Transition> transitions);
     void runSimulation(std::vector<std::string> inputs);
     std::string getAutomataType();
 };

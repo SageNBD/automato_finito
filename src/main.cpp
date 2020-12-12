@@ -4,7 +4,7 @@
 #include <utils.hpp>
 #include <Transition.hpp>
 #include <State.hpp>
-#include <AutomatoFinito.hpp>
+#include <MaquinaTuring.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     std::vector<Transition> transitions = readTransitions();
     std::vector<std::string> chains = readChains();
 
-    AutomatoFinito a = AutomatoFinito(
+    MaquinaTuring a = MaquinaTuring(
         numStates, terminalSymbols, sigmaExtended, initStates, acceptingStates, transitions);
 
     a.runSimulation(chains);

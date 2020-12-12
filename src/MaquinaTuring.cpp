@@ -1,10 +1,15 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <AutomatoFinito.hpp>
+#include <MaquinaTuring.hpp>
 
-AutomatoFinito::AutomatoFinito(int n, std::string terminalSymbols, std::string sigmaExtended, std::vector<int> initStates,
-                               std::vector<int> acceptingStates, std::vector<Transition> transitions)
+MaquinaTuring::MaquinaTuring(
+    int n,
+    std::string terminalSymbols,
+    std::string sigmaExtended,
+    std::vector<int> initStates,
+    std::vector<int> acceptingStates,
+    std::vector<Transition> transitions)
 {
     this->numStates = n;
     this->terminalSymbols = terminalSymbols;
@@ -18,7 +23,7 @@ AutomatoFinito::AutomatoFinito(int n, std::string terminalSymbols, std::string s
 }
 
 /**
- * bool AutomatoFinito::setAcceptingStates(std::vector<int> acceptingStates)
+ * bool MaquinaTuring::setAcceptingStates(std::vector<int> acceptingStates)
  * 
  * Initially sets every state isFinal flag to false
  * Then, loops through the acceptingStates vector, and given the state id,
@@ -27,7 +32,7 @@ AutomatoFinito::AutomatoFinito(int n, std::string terminalSymbols, std::string s
  * @param   std::vector<int>    acceptingStates     vector containing all state ids
  * @return  void
  */
-void AutomatoFinito::setAcceptingStates(std::vector<int> acceptingStates)
+void MaquinaTuring::setAcceptingStates(std::vector<int> acceptingStates)
 {
     for (int i = 0; i < this->numStates; ++i)
         this->states[i].setFinal(false);
@@ -36,20 +41,20 @@ void AutomatoFinito::setAcceptingStates(std::vector<int> acceptingStates)
 }
 
 /**
- * bool AutomatoFinito::isValidSymbol(char ch)
+ * bool MaquinaTuring::isValidSymbol(char ch)
  * 
  * Check if a symbol is terminal by looping through the terminalSymbols vector
  * 
  * @param   char    ch    destination edge id
  * @return  bool    valid or not
  */
-bool AutomatoFinito::isValidSymbol(char ch)
+bool MaquinaTuring::isValidSymbol(char ch)
 {
     return ch != ' ';
 }
 
 /**
- * bool AutomatoFinito::indexOutOfRange(int src, int dest)
+ * bool MaquinaTuring::indexOutOfRange(int src, int dest)
  * 
  * Checks if the source and destination Ids of an edge are valid, that is,
  * it respects the interval [0, numStates - 1]
@@ -58,7 +63,7 @@ bool AutomatoFinito::isValidSymbol(char ch)
  * @param   int     dest    destination edge id
  * @return  bool    valid or not
  */
-bool AutomatoFinito::indexOutOfRange(int src, int dst)
+bool MaquinaTuring::indexOutOfRange(int src, int dst)
 {
     if (src < 0 || src >= this->numStates || dst < 0 || dst >= this->numStates)
     {
@@ -69,15 +74,15 @@ bool AutomatoFinito::indexOutOfRange(int src, int dst)
 }
 
 /**
- * void AutomatoFinito::insertTransition(Transition transition)
+ * void MaquinaTuring::insertTransition(Transition transition)
  * 
- * Insert a single transition in the automata, checking if the data
- * is respects the automata constraints
+ * Insert a single transition in the turing machine, checking if the data
+ * is respects the turing machine constraints
  * 
- * @param   Transition     transition     Automata edge
+ * @param   Transition     transition     turing machine edge
  * @return  void
  */
-void AutomatoFinito::insertTransition(int src, int dst, char chR, char chW, char D)
+void MaquinaTuring::insertTransition(int src, int dst, char chR, char chW, char D)
 {
     if (!isValidSymbol(chR) || !isValidSymbol(chW) || indexOutOfRange(src, dst))
         return;
@@ -85,16 +90,16 @@ void AutomatoFinito::insertTransition(int src, int dst, char chR, char chW, char
 }
 
 /**
- * void AutomatoFinito::insertTransitions(std::vector<Transition> transitions)
+ * void MaquinaTuring::insertTransitions(std::vector<Transition> transitions)
  * 
  * For every Transition object containing the data of an edge, check if
  * the data is valid (not out of bounds or is terminal character) and 
  * pushes it to the transition vector of the source state.
  * 
- * @param   std::vector<Transition>     transitions     Automata edges
+ * @param   std::vector<Transition>     transitions     turing machine edges
  * @return  void
  */
-void AutomatoFinito::insertTransitions(std::vector<Transition> transitions)
+void MaquinaTuring::insertTransitions(std::vector<Transition> transitions)
 {
     for (int i = 0; i < (int)transitions.size(); ++i)
     {
@@ -106,11 +111,11 @@ void AutomatoFinito::insertTransitions(std::vector<Transition> transitions)
 }
 
 /**
- * void AutomatoFinito::printTrasition()
+ * void MaquinaTuring::printTrasition()
  * 
- * Print each transition of all the states in the automata 
+ * Print each transition of all the states in the turing machine 
  */
-void AutomatoFinito::printTransition()
+void MaquinaTuring::printTransition()
 {
     for (auto u : this->states)
     {
@@ -123,9 +128,9 @@ void AutomatoFinito::printTransition()
 }
 
 /**
- * void AutomatoFinito::isValidChain(std::string str, int stateId, int currIdx)
+ * void MaquinaTuring::isValidChain(std::string str, int stateId, int currIdx)
  * 
- * Determines if a chain is valid by running a DFS on the automata. 
+ * Determines if a chain is valid by running a DFS on the turing machine. 
  * Given a state 's' and the current character 'ch' of the chain, check if there is a possible
  * path that matches 'ch' and the transitions that start from 's'.
  * If so, recursively call isValidChain(), incrementing the index and using one of the 
@@ -136,13 +141,12 @@ void AutomatoFinito::printTransition()
  * @param   int           currIdx     current index of chain
  * @return  bool          isValid     chain validation
  */
-bool AutomatoFinito::isValidChain(std::string str, int stateId, int currIdx)
+bool MaquinaTuring::isValidChain(std::string str, int stateId, int currIdx)
 {
     // Chegou no estado de aceitação, retornar
     if (stateId == this->acceptingStates[0])
         return true;
 
-    //std::cout << "Antes " << str << " " << stateId << " " << currIdx << '\n';
     if (currIdx >= (int)str.size())
     {
         str.push_back('B');
@@ -153,7 +157,6 @@ bool AutomatoFinito::isValidChain(std::string str, int stateId, int currIdx)
         str = "B" + str;
         currIdx = 0;
     }
-    //std::cout << "Depois " << str << " " << stateId << " " << currIdx << '\n';
 
     State currState = this->states[stateId];
     // Test all transitions of 'stateId'
@@ -172,33 +175,26 @@ bool AutomatoFinito::isValidChain(std::string str, int stateId, int currIdx)
             // restore tape
             str[currIdx] = t.edgeRead;
         }
-        // Lambda
-        // else if (t.edgeRead == '-' && isValidChain(str, t.dest, currIdx))
-        // {
-        //     return true;
-        // }
     }
 
     return false; // Didnt find transition that matched current chain symbol
 }
 
 /**
- * void AutomatoFinito::runSimulation(std::vector<std::string> inputs)
+ * void MaquinaTuring::runSimulation(std::vector<std::string> inputs)
  * 
  * For each user input string, determines if the current chain is valid
  * by calling the isValidChain() function.
- * If the automata is non-deterministic, call the validation function
+ * If the turing machine is non-deterministic, call the validation function
  * for every initial state.
  * 
  * @param std::vector<std::string>  inputs  chains to be determined
  * @return  none    prints a message that indicates whether the chain is valid or not
  */
-void AutomatoFinito::runSimulation(std::vector<std::string> inputs)
+void MaquinaTuring::runSimulation(std::vector<std::string> inputs)
 {
-    std::cout << "Running..." << '\n';
     for (auto chain : inputs)
     {
-        //std::cout << chain << ": ";
         bool foundSolution = false;
         for (auto stateId : this->initStates)
         {
@@ -213,13 +209,13 @@ void AutomatoFinito::runSimulation(std::vector<std::string> inputs)
 }
 
 /**
- * std::string AutomatoFinito::getAutomataType()
+ * std::string MaquinaTuring::getturing machineType()
  * 
- * Returns whether automata is deterministic or non-deterministic
+ * Returns whether turing machine is deterministic or non-deterministic
  * 
- * @return std::string  automataType    Deterministic or Non-Deterministic
+ * @return std::string  turing machineType    Deterministic or Non-Deterministic
  */
-std::string AutomatoFinito::getAutomataType()
+std::string MaquinaTuring::getAutomataType()
 {
     return this->bIsAFD ? "Determinístico" : "Não Determinístico";
 }
